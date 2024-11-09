@@ -1,35 +1,83 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState, useRef } from "react";
+import axios from "axios";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [image, setImage] = useState(null);
+  const [resultText, setResultText] = useState("");
+  const [limeImage, setLimeImage] = useState(null);
+  const [shapImage, setShapImage] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const fileInputRef = useRef(null);
+
+  const handleImageUpload = (event) => {
+    setImage(event.target.files[0]);
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (!image) return alert("Please upload an image first.");
+
+    setLoading(true);
+    setTimeout(() => {
+      setResultText("Cancer detected");
+      setLimeImage("https://via.placeholder.com/300?text=LIME+Explanation");
+      setShapImage("https://via.placeholder.com/300?text=SHAP+Explanation");
+      setLoading(false);
+    }, 2000);
+  };
+
+  const handleReset = () => {
+    setImage(null);
+    setResultText("");
+    setLimeImage(null);
+    setShapImage(null);
+    setLoading(false);
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+    <div className='App'>
+      <h1>TranspariMed - Melanoma Detection</h1>
+      <form onSubmit={handleSubmit}>
+        <input
+          type='file'
+          accept='image/*'
+          onChange={handleImageUpload}
+          ref={fileInputRef}
+        />
+        <button type='submit' disabled={loading}>
+          {loading ? "Processing..." : "Upload and Predict"}
         </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+      </form>
+      <button onClick={handleReset}>Reset</button>
+
+      {resultText && (
+        <div className='result-section'>
+          <h2>Diagnosis Result:</h2>
+          <p>{resultText}</p>
+        </div>
+      )}
+
+      {limeImage && shapImage && (
+        <div className='explanation-section'>
+          <h2>XAI Explanations</h2>
+          <div className='explanation-section1'>
+            <div className='explanation'>
+              <img src={limeImage} alt='LIME Explanation' />
+            </div>
+            <div className='explanation'>
+              <img src={shapImage} alt='SHAP Explanation' />
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
 
-export default App
+export default App;
