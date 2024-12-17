@@ -1,42 +1,166 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+/* App.css */
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #121212; /* Dark background */
+  color: #e0e0e0; /* Light gray text */
+  font-family: 'Arial', sans-serif;
+}
+
+.App {
+  text-align: center;
+  padding: 20px;
+}
+
+h1 {
+  font-size: 2.5rem;
+  color: #bb86fc; /* Highlighted purple */
+  margin-bottom: 1rem;
+}
+
+form {
+  margin-bottom: 2rem;
+}
+
+input[type="file"] {
+  display: block;
+  margin: 0 auto 1rem;
+  padding: 10px;
+  border: 1px solid #444;
+  border-radius: 5px;
+  background-color: #1f1f1f;
+  color: #e0e0e0;
+}
+
+button {
+  background-color: #bb86fc;
+  color: #121212;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin: 10px;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #9a67ea;
+}
+
+button:disabled {
+  background-color: #444;
+  cursor: not-allowed;
+}
+
+.result-section, .plot-section {
+  margin: 20px auto;
+  background-color: #1e1e1e;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  max-width: 1200px;
+}
+
+.result-section h2, .plot-section h2 {
+  font-size: 1.5rem;
+  color: #bb86fc;
+  margin-bottom: 10px;
+}
+
+img {
+  max-width: 100%;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #1e1e1e;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  max-width: 500px;
+  max-height: 70vh; /* Set a max height */
+  overflow-y: auto; /* Make modal scrollable */
+  text-align: left; /* Align text to the left */
+}
+
+.modal-content h2 {
+  color: #bb86fc;
+  margin-bottom: 1rem;
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.modal-content ul {
+  list-style-type: disc; /* Add bullets */
+  padding-left: 20px;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.modal-content li {
+  margin-bottom: 10px; /* Add spacing between items */
+  color: #e0e0e0;
+  font-size: 0.95rem;
+  line-height: 1.5;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.close-button {
+  background-color: #ff5252;
+  color: #121212;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 15px;
+  cursor: pointer;
+  margin-top: 10px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.card {
-  padding: 2em;
+.close-button:hover {
+  background-color: #ff1744;
 }
 
-.read-the-docs {
-  color: #888;
+/* Container for the images */
+.image-container {
+  display: flex; /* Use flexbox */
+  flex-wrap: wrap; /* Allow wrapping when screen size is small */
+  justify-content: center; /* Center the images horizontally */
+  gap: 20px; /* Add spacing between images */
+  margin: 20px 0; /* Add margin for spacing */
+}
+
+/* Individual images */
+.image-container img {
+  flex: 1 1 300px; /* Flex-grow, flex-shrink, and base size of 300px */
+  max-width: 300px; /* Prevent images from being too large */
+  height: auto; /* Maintain aspect ratio */
+  border-radius: 10px; /* Add rounded corners for aesthetics */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Add a subtle shadow */
+  transition: transform 0.3s ease; /* Smooth scaling effect */
+}
+
+/* Add a hover effect for images */
+.image-container img:hover {
+  transform: scale(1.05); /* Slightly enlarge the image on hover */
+}
+
+.plot-section img {
+  width: 100%; /* Make image take full width of the container */
+  height: 200px; /* Fixed height for consistency */
+  object-fit: cover; /* Ensures images scale properly without distortion */
+  border-radius: 8px; /* Optional: Keeps the rounded corners */
 }
