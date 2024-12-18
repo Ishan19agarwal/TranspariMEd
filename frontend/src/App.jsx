@@ -6,11 +6,13 @@ function App() {
   const [image, setImage] = useState(null);
   const [resultText, setResultText] = useState("");
   const [textualReasons, setTextualReasons] = useState("");
+  const [gradcamExplanation, setGradcamExplanation] = useState("");
   const [plotUrl, setPlotUrl] = useState(null);
   const [limeExplanationUrl, setLimeExplanationUrl] = useState(null);
   const [gradcamUrl, setGradcamUrl] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [explanationType, setExplanationType] = useState("LIME"); // New state for toggle
 
   const fileInputRef = useRef(null);
 
@@ -32,10 +34,11 @@ function App() {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      const { result, textual_reasons, plot_url, lime_explanation_url, gradcam_url } = response.data;
+      const { result, textual_reasons, gradcam_explanation, plot_url, lime_explanation_url, gradcam_url } = response.data;
 
       setResultText(result);
       setTextualReasons(textual_reasons);
+      setGradcamExplanation(gradcam_explanation);
       setPlotUrl(`http://127.0.0.1:5000/${plot_url}`);
       setLimeExplanationUrl(`http://127.0.0.1:5000/${lime_explanation_url}`);
       setGradcamUrl(`http://127.0.0.1:5000/${gradcam_url}`);
@@ -51,6 +54,7 @@ function App() {
     setImage(null);
     setResultText("");
     setTextualReasons("");
+    setGradcamExplanation("");
     setPlotUrl(null);
     setLimeExplanationUrl(null);
     setGradcamUrl(null);
@@ -60,7 +64,7 @@ function App() {
 
   return (
     <div className="App">
-      <h1>TranspariMed - Melanoma Detection</h1>
+      <h1>TranspariMed</h1>
       <form onSubmit={handleSubmit}>
         <input type="file" accept="image/*" onChange={handleImageUpload} ref={fileInputRef} />
         <button type="submit" disabled={loading}>
@@ -73,54 +77,68 @@ function App() {
         <div className="result-section">
           <h2>Diagnosis Result</h2>
           <p>{resultText}</p>
-          <button onClick={() => setShowModal(true)}>View Textual Reasons</button>
+          <button onClick={() => setShowModal(true)}>View Explanations</button>
         </div>
       )}
-
-{showModal && (
+      {showModal && (
   <div className="modal-overlay">
     <div className="modal-content">
-      <h2>Textual Reasons</h2>
-      <ul>
-        {textualReasons
-          .split(/Feature \d+:/) // Split based on "Feature X:"
-          .filter((reason) => reason.trim() !== "") // Remove empty strings
-          .map((reason, index) => (
-            <li key={index}>Feature {index + 1}: {reason.trim()}</li>
-          ))}
-      </ul>
-      <button className="close-button" onClick={() => setShowModal(false)}>
-        Close
-      </button>
+      <h2>Explanations</h2>
+      <div className="explanation-toggle">
+        <button
+          onClick={() => setExplanationType("LIME")}
+          className={explanationType === "LIME" ? "active" : ""}
+        >
+          LIME Explanation
+        </button>
+        <button
+          onClick={() => setExplanationType("Grad-CAM")}
+          className={explanationType === "Grad-CAM" ? "active" : ""}
+        >
+          Grad-CAM Explanation
+        </button>
+      </div>
+      {explanationType === "LIME" ? (
+        <ul>
+          {textualReasons
+            .split(/Feature \d+:/) // Split based on "Feature X:"
+            .filter((reason) => reason.trim() !== "") // Remove empty strings
+            .map((reason, index) => (
+              <li key={index}>Feature {index + 1}: {reason.trim()}</li>
+            ))}
+        </ul>
+      ) : (
+        <p>{gradcamExplanation}</p>
+      )}
+      <button className="close-button" onClick={() => setShowModal(false)}>Close</button>
     </div>
   </div>
 )}
 
 
       <div className="plot-section">
-            {(plotUrl || limeExplanationUrl || gradcamUrl) && (
+        {(plotUrl || limeExplanationUrl || gradcamUrl) && (
           <div className="image-container">
-          {plotUrl && (
-            <div>
-              <h2>Original Image</h2>
-              <img src={plotUrl} alt="Original Image" />
-            </div>
-          )}
-          {limeExplanationUrl && (
-            <div>
-              <h2>LIME Explanation</h2>
-              <img src={limeExplanationUrl} alt="LIME Explanation" />
-            </div>
-          )}
-          {gradcamUrl && (
-            <div>
-              <h2>Grad-CAM Heatmap</h2>
-              <img src={gradcamUrl} alt="Grad-CAM Heatmap" />
-            </div>
-          )}
+            {plotUrl && (
+              <div>
+                <h2>Original Image</h2>
+                <img src={plotUrl} alt="Original Image" />
+              </div>
+            )}
+            {limeExplanationUrl && (
+              <div>
+                <h2>LIME Explanation</h2>
+                <img src={limeExplanationUrl} alt="LIME Explanation" />
+              </div>
+            )}
+            {gradcamUrl && (
+              <div>
+                <h2>Grad-CAM Heatmap</h2>
+                <img src={gradcamUrl} alt="Grad-CAM Heatmap" />
+              </div>
+            )}
           </div>
-          )}
-
+        )}
       </div>
     </div>
   );

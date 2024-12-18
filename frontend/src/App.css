@@ -164,3 +164,34 @@ img {
   object-fit: cover; /* Ensures images scale properly without distortion */
   border-radius: 8px; /* Optional: Keeps the rounded corners */
 }
+/* Styling for toggle buttons */
+.modal-content .explanation-toggle {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.modal-content .explanation-toggle button {
+  background-color: #bb86fc;
+  color: #121212;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 15px;
+  cursor: pointer;
+  margin: 0 5px;
+  transition: background-color 0.3s ease;
+}
+
+.modal-content .explanation-toggle button:hover {
+  background-color: #9a67ea;
+}
+
+.modal-content .explanation-toggle button.active {
+  background-color: #7b52c1;
+}
+
+.modal-content p {
+  color: #e0e0e0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
